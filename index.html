@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Title | Conference 2026</title>
+
+  <script type="module"
+    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+  </script>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #111111;
+      --muted: #666666;
+      --line: #e5e7eb;
+      --soft: #f7f7f8;
+      --accent: #1f4fd1;
+      --accent-hover: #173da3;
+      --max-width: 1100px;
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      width: min(var(--max-width), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 56px 0 32px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(to bottom, #fafafa, #ffffff);
+    }
+
+    .title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-align: center;
+      margin: 0 0 18px;
+    }
+
+    .conference {
+      text-align: center;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 14px;
+      font-size: 0.98rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .authors {
+      text-align: center;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+
+    .affiliations {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.98rem;
+      margin-bottom: 24px;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      text-decoration: none;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .btn.primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .section {
+      padding: 42px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section h2 {
+      font-size: 1.6rem;
+      margin: 0 0 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .section p {
+      margin: 0 0 14px;
+      color: #222;
+    }
+
+    .lead {
+      font-size: 1.06rem;
+      color: #222;
+    }
+
+    .viewer-card,
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .viewer-card {
+      padding: 16px;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 640px;
+      background:
+        radial-gradient(circle at top, #fdfdfd 0%, #f4f5f7 65%, #eceef2 100%);
+      border-radius: 14px;
+    }
+
+    .viewer-caption {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+    }
+
+    .feature-list {
+      margin: 0;
+      padding-left: 20px;
+      color: #222;
+    }
+
+    .feature-list li {
+      margin-bottom: 10px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .metric {
+      padding: 20px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--soft);
+      text-align: center;
+    }
+
+    .metric .value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .media-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 14px;
+      border: 1px dashed #c8ccd3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      background: #fafafa;
+      font-weight: 600;
+    }
+
+    pre {
+      margin: 0;
+      overflow-x: auto;
+      padding: 18px;
+      border-radius: 14px;
+      background: #0f172a;
+      color: #e5e7eb;
+      font-size: 0.93rem;
+      line-height: 1.55;
+    }
+
+    .footer {
+      padding: 28px 0 40px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .subtle {
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      model-viewer {
+        height: 480px;
+      }
+
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding-top: 38px;
+      }
+
+      model-viewer {
+        height: 380px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .links {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="container">
+      <div class="conference">Conference 2026</div>
+      <h1 class="title">
+        Your Project Title:<br />
+        A Clean Project Page with Interactive 3D Results
+      </h1>
+
+      <div class="authors">
+        <strong>Author One</strong><sup>1</sup>,
+        <strong>Author Two</strong><sup>1</sup>,
+        <strong>Author Three</strong><sup>2</sup>
+      </div>
+
+      <div class="affiliations">
+        <sup>1</sup>Affiliation One &nbsp;&nbsp; | &nbsp;&nbsp;
+        <sup>2</sup>Affiliation Two
+      </div>
+
+      <div class="links">
+        <a class="btn primary" href="#">Paper</a>
+        <a class="btn" href="#">arXiv</a>
+        <a class="btn" href="#">Code</a>
+        <a class="btn" href="#">Supplementary</a>
+        <a class="btn" href="#viewer">Interactive Demo</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="viewer" class="section">
+      <div class="container">
+        <h2>Interactive 3D Result</h2>
+
+        <div class="viewer-card">
+          <model-viewer
+            src="./model.glb"
+            alt="3D result"
+            camera-controls
+            auto-rotate
+            shadow-intensity="1"
+            exposure="1"
+            environment-image="neutral"
+            interaction-prompt="auto"
+            loading="eager">
+          </model-viewer>
+
+          <div class="viewer-caption">
+            Drag to rotate, scroll to zoom, and inspect the 3D result interactively.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>Abstract</h2>
+        <p class="lead">
+          We present a simple and effective framework for interactive 3D visualization
+          and academic result presentation. Our method enables clean demonstration of
+          qualitative results through a web-friendly GLB viewer while preserving the
+          minimal and professional design commonly used in top-tier conference project pages.
+        </p>
+        <p>
+          Replace this paragraph with your real abstract. Usually 1–2 paragraphs are enough.
+          Keep it concise, technical, and aligned with the paper contribution.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="grid-2">
+          <div>
+            <h2>Method Overview</h2>
+            <p>
+              Summarize the core idea of your method here. This section typically explains
+              what problem you solve, what is novel, and why your design is effective.
+            </p>
+            <ul class="feature-list">
+              <li>Problem formulation and motivation</li>
+              <li>Main architectural or algorithmic contribution</li>
+              <li>How the method differs from prior work</li>
+              <li>Why the resulting 3D output matters</li>
+            </ul>
+          </div>
+
+          <div class="card" style="padding: 18px;">
+            <div class="media-placeholder">
+              Put method figure here (PNG/JPG/SVG)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>Results</h2>
+        <p>
+          This section is often used for quantitative highlights and qualitative comparisons.
+          You can replace the numbers below with your actual performance.
+        </p>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <div class="value">+1.24</div>
+            <div class="label">PSNR Improvement</div>
+          </div>
+          <div class="metric">
+            <div class="value">0.962</div>
+            <div class="label">SSIM</div>
+          </div>
+          <div class="metric">
+            <div class="value">-0.031</div>
+            <div class="label">LPIPS</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="grid-2">
+          <div>
+            <h2>Qualitative Comparison</h2>
+            <p>
+              Add image grids, videos, or additional interactive models here.
+              Many project pages place comparison figures in this section.
+            </p>
+            <div class="media-placeholder">
+              Qualitative figure / video / comparison panel
+            </div>
+          </div>
+
+          <div>
+            <h2>Discussion</h2>
+            <p>
+              Briefly mention the strengths, limitations, and potential applications
+              of your method. This is optional, but useful if your project page is
+              meant to complement the paper.
+            </p>
+            <p class="subtle">
+              Example: robust geometry recovery, perceptual quality enhancement,
+              efficient rendering, or better downstream reconstruction.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>BibTeX</h2>
+        <pre>@inproceedings{yourproject2026,
+  title     = {Your Project Title},
+  author    = {Author One and Author Two and Author Three},
+  booktitle = {Conference Name},
+  year      = {2026}
+}</pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      Project page template for academic presentation. Replace all placeholder text,
+      links, figures, and metrics with your actual content.
+    </div>
+  </footer>
+
+</body>
+</html>
