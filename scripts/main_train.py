@@ -34,7 +34,7 @@ from utils.utils_visual import visualize_residual
 from diffusion.my_utils.wavelet_color_fix import adain_color_fix, wavelet_color_fix
 from diffusion.CompMVR import (
     CompMVR,
-    compression_damage_loss,
+    compression_artifact_loss,
     VGGTCorrespondenceLoss
 )
 from diffusion.models.discriminator import Discriminator
@@ -273,7 +273,7 @@ def main(args):
             layers_to_opt.append(p)
     layers_to_opt += list(model_gen.proj.parameters())
     if args.use_intra:
-        layers_to_opt += list(model_gen.damage_estimator.parameters())
+        layers_to_opt += list(model_gen.artifact_estimator.parameters())
         if args.use_spatial_r and model_gen.r_spatial_adapter is not None:
             layers_to_opt += list(model_gen.r_spatial_adapter.parameters())
     if args.use_inter:
@@ -421,7 +421,7 @@ def main(args):
 
                 r_loss = torch.tensor(0.0, device="cuda")
                 if args.use_intra and out["r_gt"] is not None:
-                    r_loss = compression_damage_loss(
+                    r_loss = compression_artifact_loss(
                         out["r_pred"], out["r_gt"], alpha=args.r_loss_alpha)
                     loss = loss + r_loss * args.r_loss_weight
                     

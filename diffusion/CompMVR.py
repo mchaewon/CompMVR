@@ -89,7 +89,7 @@ def initialize_unet(args):
     return unet, l_target_modules_encoder, l_target_modules_decoder, l_modules_others
 
 
-class CompressionDamageEstimator(nn.Module):
+class CompressionArtifactEstimator(nn.Module):
 
     def __init__(self, in_ch=3, hidden_ch=32):
         super().__init__()
@@ -131,9 +131,9 @@ class CompressionDamageEstimator(nn.Module):
         return out
 
 
-def compression_damage_loss(r_pred: torch.Tensor,
-                             r_gt: torch.Tensor,
-                             alpha: float = 0.3) -> torch.Tensor:
+def compression_artifact_loss(r_pred: torch.Tensor,
+                              r_gt: torch.Tensor,
+                              alpha: float = 0.3) -> torch.Tensor:
 
     r_gt_norm  = r_gt / 2.0
     error      = r_pred - r_gt_norm
@@ -530,7 +530,7 @@ class CompMVR(nn.Module):
         self.proj = nn.Linear(512, 1024).to("cuda")
         self.proj.requires_grad_(True)
 
-        self.damage_estimator = CompressionDamageEstimator(in_ch=3, hidden_ch=32).to("cuda")
+        self.artifact_estimator = CompressionArtifactEstimator(in_ch=3, hidden_ch=32).to("cuda")
 
         if self.use_inter:
             self._build_inter_modules()
@@ -635,8 +635,8 @@ class CompMVR(nn.Module):
 
 
         if self.use_intra:
-            self.damage_estimator.train()
-            for p in self.damage_estimator.parameters():
+            self.artifact_estimator.train()
+            for p in self.artifact_estimator.parameters():
                 p.requires_grad = True
             if self.use_spatial_r and self.r_spatial_adapter is not None:
                 self.r_spatial_adapter.train()
@@ -664,8 +664,8 @@ class CompMVR(nn.Module):
                 p.requires_grad = False
         self.unet.conv_in.requires_grad_(False)
         if self.use_intra:
-            self.damage_estimator.eval()
-            for p in self.damage_estimator.parameters():
+            self.artifact_estimator.eval()
+            for p in self.artifact_estimator.parameters():
                 p.requires_grad = False
             if self.use_spatial_r and self.r_spatial_adapter is not None:
                 self.r_spatial_adapter.eval()
@@ -699,7 +699,7 @@ class CompMVR(nn.Module):
         params += list(self.proj.parameters())
 
         if self.use_intra:
-            params += list(self.damage_estimator.parameters())
+            params += list(self.artifact_estimator.parameters())
             if self.use_spatial_r and self.r_spatial_adapter is not None:
                 params += list(self.r_spatial_adapter.parameters())
         return params
@@ -730,7 +730,7 @@ class CompMVR(nn.Module):
     def forward(self, c_t: torch.Tensor,
                 visual_embedding: torch.Tensor,
                 c_tgt: Optional[torch.Tensor] = None):
-        r_pred = self.damage_estimator(c_t) if self.use_intra else None
+        r_pred = self.artifact_estimator(c_t) if self.use_intra else None
 
         # 3. VAE encode
         z_L = self.vae.encode(c_t).latent_dist.sample() * self.vae.config.scaling_factor
@@ -772,7 +772,7 @@ class CompMVR(nn.Module):
 
     @torch.no_grad()
     def eval(self, lq: torch.Tensor, visual_embedding: torch.Tensor) -> torch.Tensor:
-        r_pred = self.damage_estimator(lq) if self.use_intra else None
+        r_pred = self.artifact_estimator(lq) if self.use_intra else None
 
         z_L = self.vae.encode(lq).latent_dist.sample() * self.vae.config.scaling_factor
 
@@ -811,7 +811,7 @@ class CompMVR(nn.Module):
         sd["proj"]             = self.proj.state_dict()
 
         if self.use_intra:
-            sd["damage_estimator"] = self.damage_estimator.state_dict()
+            sd["artifact_estimator"] = self.artifact_estimator.state_dict()
             sd["use_intra"]       = self.use_intra
 
             if self.use_spatial_r and self.r_spatial_adapter is not None:
@@ -852,7 +852,7 @@ class CompMVR_test(nn.Module):
         self.proj = nn.Linear(512, 1024)
 
         # Intra
-        self.damage_estimator = CompressionDamageEstimator(in_ch=3, hidden_ch=32)
+        self.artifact_estimator = CompressionArtifactEstimator(in_ch=3, hidden_ch=32)
 
         self.use_intra    = args.use_intra
 
@@ -891,7 +891,7 @@ class CompMVR_test(nn.Module):
         self.unet.to("cuda", dtype=self.weight_dtype)
         self.vae.to("cuda",  dtype=self.weight_dtype)
         self.proj.to("cuda")
-        self.damage_estimator.to("cuda", dtype=self.weight_dtype)
+        self.artifact_estimator.to("cuda", dtype=self.weight_dtype)
         if self.r_spatial_adapter is not None:
             self.r_spatial_adapter.to("cuda", dtype=self.weight_dtype)
         
@@ -1026,10 +1026,10 @@ class CompMVR_test(nn.Module):
                     p.data.copy_(ckpt["state_dict_vae"][n])
             self.vae.set_adapter(["default_encoder"])
 
-        if "damage_estimator" in ckpt:
-            self.damage_estimator.load_state_dict(ckpt["damage_estimator"])
-            print("[Load] damage_estimator weights loaded")
-            
+        if "artifact_estimator" in ckpt:
+            self.artifact_estimator.load_state_dict(ckpt["artifact_estimator"])
+            print("[Load] artifact_estimator weights loaded")
+
         if "r_spatial_adapter" in ckpt and self.r_spatial_adapter is not None:
             self.r_spatial_adapter.load_state_dict(ckpt["r_spatial_adapter"])
             print("[Load] r_spatial_adapter loaded")
@@ -1046,7 +1046,7 @@ class CompMVR_test(nn.Module):
     @torch.no_grad()
     def forward(self, lq, visual_embedding):
         """lq: (B*N, C, H, W) flat tensor"""
-        r_pred = self.damage_estimator(lq.to(self.weight_dtype)) if self.use_intra else None
+        r_pred = self.artifact_estimator(lq.to(self.weight_dtype)) if self.use_intra else None
 
         if self.use_inter:
             self._hooks_active   = True
@@ -1190,7 +1190,7 @@ class CompMVR_test(nn.Module):
         self.vae.eval()
         self.unet.eval()
         if self.use_intra:         
-            self.damage_estimator.eval()
+            self.artifact_estimator.eval()
         if self.use_inter:
             self.temporal_res_blocks.eval()
             self.view_attn_blocks.eval()
