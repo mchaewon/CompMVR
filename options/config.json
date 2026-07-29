@@ -1,0 +1,23 @@
+{
+  "n_channels": 3,
+  "datasets": {
+    "train": {
+      "name": "train_dataset"
+      , "dataroot_H": ["./dataset/trainset_v2/gt"]
+      , "dataroot_L": ["./dataset/trainset_v2/comp"]
+      , "H_size": 256
+      , "dataloader_shuffle": true
+      , "dataloader_num_workers": 4
+      , "dataloader_batch_size": 2
+    },
+    "test": {
+      "name": "test_dataset"
+      , "dataset_type": "png"
+      , "dataroot_H": ["./dataset/validset_v2/gt"]
+      , "dataroot_L": ["./dataset/validset_v2/comp"]
+    }
+  }
+}
+
+
+
