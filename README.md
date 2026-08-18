@@ -4,7 +4,7 @@
   <!-- <a href="#">
     <img src="https://img.shields.io/badge/Paper-CVPR%202026-red" alt="Paper">
   </a> -->
-  <a href="https://diffusion-sr.github.io/FiDeSR/">
+  <a href="#">
     <img src="https://img.shields.io/badge/Project-Page-blue" alt="Project">
   </a>
 </p>
