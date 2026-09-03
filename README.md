@@ -47,7 +47,7 @@ cd CompMVR
 ```bash
 docker build -t compmvr:latest .
 docker run -it --gpus '"device=0"' --shm-size 16G \
-  -v $(pwd):/compmvr -v /path/to/compmvr/data:/dataset \
+  -v $(pwd):/CompMVR -v /path/to/CompMVR/data:/CompMVR/dataset \
   compmvr:latest /bin/bash
 ```
 
