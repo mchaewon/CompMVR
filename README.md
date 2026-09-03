@@ -17,11 +17,11 @@ Official PyTorch implementation of the paper "CompMVR: Compression-Aware Multi-V
 </a>
 
 ---
-## 🔥 News
+## 📰 News
 - **2026-06** SIGGRAPH-ASIA 2026 Accepted
 - **2026-09** Code released.
 
-## TODO
+## 🔥 TODO
 
 - [x] Release the main code 
 - [ ] Release pre-trained checkpoints
@@ -63,7 +63,7 @@ conda activate compmvr
 pip install -r requirements.txt
 ```
 
-## Data preparation
+## 🗂️ Data preparation
 
 The datasets used for training and evaluation can be downloaded from the links below:
 
