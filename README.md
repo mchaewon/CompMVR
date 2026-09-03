@@ -13,7 +13,7 @@ Official PyTorch implementation of the paper "CompMVR: Compression-Aware Multi-V
   <img src="https://img.shields.io/badge/Paper-SIGGRAPH_ASIA-red" alt="Paper">
 </a>
 <a href="https://mchaewon.github.io/CompMVR-project-page/">
-  <img src="https://img.shields.io/badge/Project-Page-blue" alt="Project">
+  <img src="https://img.shields.io/badge/Project-CompMVR-blue" alt="Project">
 </a>
 
 ---
