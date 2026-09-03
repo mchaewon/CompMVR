@@ -55,6 +55,15 @@ conda activate compmvr
 pip install -r requirements.txt
 ```
 
+## Data preparation
+
+The datasets used for training and evaluation can be downloaded from the links below:
+
+| Split | Download |
+|---|---|
+| Train set | [Download](https://gofile.me/7Z8aO/N4Dli1Yj5) |
+| Test set | [Download](https://gofile.me/7Z8aO/dtTfPA9Bn) |
+
 ## ⚡ Quick Inference
 
 ### Step 1: Download the Pretrained Models
@@ -69,11 +78,7 @@ Download the following models:
 <!-- | CompMVR | CompMVR stage 1 checkpoint | [compmvr_s1.pkl](#) |
 | CompMVR | CompMVR stage 2 checkpoint | [compmvr_s2.pkl](#) | -->
 
-### Step 2: Prepare the test datasets
-
-test datasets coming soon.
-
-### Step 3: Run Inference
+### Step 2: Run Inference
 
 ```bash
 bash scripts/main_test.sh
