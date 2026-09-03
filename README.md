@@ -1,4 +1,8 @@
 # CompMVR: Compression-Aware Multi-View Restoration Using Diffusion Models for Geometrically Consistent 3D Reconstruction
+[Dong-hwi Kim](#)<sup>1,\*</sup>, [Chaewon Moon](https://mchaewon.github.io/)<sup>1,\*</sup>, Hojun Song,  Dongbeom Kim<sup>1</sup>, Junyeong Jang<sup>1</sup>, Aro Kim<sup>1</sup>, Gahyeon Kim<sup>1</sup>, [Heejung Choi](#)<sup>1</sup>, Jehee Kim<sup>1</sup>, Gianella Cravioto<sup>1</sup>, Sohyun Lee<sup>1</sup>, Gyeongjin Choi<sup>1</sup>, EunHye Jeong<sup>1</sup>, [Soo Ye Kim](https://sites.google.com/view/sooyekim)<sup>2,†</sup>, [Jaehyup Lee](https://sites.google.com/view/knuairlab/team/professor?authuser=0)<sup>1,†</sup>, and [Sang-hyo Park](https://sites.google.com/view/knuvi/s-park?authuser=0)<sup>1,†</sup> "CompMVR: Compression-Aware Multi-View Restoration Using Diffusion Models for Geometrically Consistent 3D Reconstruction", SIGGRAPH-ASIA 2026
+
+<sup>1</sup> Kyungpook National University, South Korea
+<sup>2</sup> Adobe Research, USA
 
 <p align="center">
   <a href="#">
