@@ -121,7 +121,6 @@ Our project builds upon [CODiff](https://github.com/jp-guo/codiff). We sincerely
   title     = {CompMVR: Compression-Aware Multi-View Restoration Using Diffusion Models for Geometrically Consistent 3D Reconstruction},
   booktitle = {SIGGRAPH Asia 2026 Conference Papers},
   year      = {2026},
-#   month     = dec,
   address   = {Kuala Lumpur, Malaysia},
   publisher = {Association for Computing Machinery},
   doi       = {10.1145/3829340.3842283},
