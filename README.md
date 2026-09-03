@@ -1,21 +1,21 @@
 # CompMVR: Compression-Aware Multi-View Restoration Using Diffusion Models for Geometrically Consistent 3D Reconstruction
-[Dong-hwi Kim](#)<sup>1,\*</sup>, [Chaewon Moon](https://mchaewon.github.io/)<sup>1,\*</sup>, Hojun Song,  Dongbeom Kim<sup>1</sup>, Junyeong Jang<sup>1</sup>, Aro Kim<sup>1</sup>, Gahyeon Kim<sup>1</sup>, [Heejung Choi](#)<sup>1</sup>, Jehee Kim<sup>1</sup>, Gianella Cravioto<sup>1</sup>, Sohyun Lee<sup>1</sup>, Gyeongjin Choi<sup>1</sup>, EunHye Jeong<sup>1</sup>, [Soo Ye Kim](https://sites.google.com/view/sooyekim)<sup>2,†</sup>, [Jaehyup Lee](https://sites.google.com/view/knuairlab/team/professor?authuser=0)<sup>1,†</sup>, and [Sang-hyo Park](https://sites.google.com/view/knuvi/s-park?authuser=0)<sup>1,†</sup> "CompMVR: Compression-Aware Multi-View Restoration Using Diffusion Models for Geometrically Consistent 3D Reconstruction", SIGGRAPH-ASIA 2026
+Official PyTorch implementation of the paper "CompMVR: Compression-Aware Multi-View Restoration Using Diffusion Models for Geometrically Consistent 3D Reconstruction", accepted to SIGGRAPH-ASIA 2026.
+
+[Dong-hwi Kim](#)<sup>1,\*</sup>, [Chaewon Moon](https://mchaewon.github.io/)<sup>1,\*</sup>, Hojun Song,  Dongbeom Kim<sup>1</sup>, Junyeong Jang<sup>1</sup>, Aro Kim<sup>1</sup>, Gahyeon Kim<sup>1</sup>, [Heejung Choi](#)<sup>1</sup>, Jehee Kim<sup>1</sup>, Gianella Cravioto<sup>1</sup>, Sohyun Lee<sup>1</sup>, Gyeongjin Choi<sup>1</sup>, EunHye Jeong<sup>1</sup>, [Soo Ye Kim](https://sites.google.com/view/sooyekim)<sup>2,†</sup>, [Jaehyup Lee](https://sites.google.com/view/knuairlab/team/professor?authuser=0)<sup>1,†</sup>, and [Sang-hyo Park](https://sites.google.com/view/knuvi/s-park?authuser=0)<sup>1,†</sup> 
 
 <sup>1</sup> Kyungpook National University, South Korea
 <sup>2</sup> Adobe Research, USA
 
-<p align="center">
-  <a href="#">
-    <img src="https://img.shields.io/badge/Paper-SIGGRAPH_ASIA-red" alt="Paper">
-  </a>
-  <a href="https://mchaewon.github.io/CompMVR-project-page/">
-    <img src="https://img.shields.io/badge/Project-Page-blue" alt="Project">
-  </a>
-</p>
+<sup>\*</sup> Equal contribution &nbsp;&nbsp; <sup>†</sup> Corresponding author
 
-<p align="center">
-  ⭐ <b>Accepted by SIGGRAPH-ASIA 2026</b>
-</p>
+
+<a href="#">
+  <img src="https://img.shields.io/badge/Paper-SIGGRAPH_ASIA-red" alt="Paper">
+</a>
+<a href="https://mchaewon.github.io/CompMVR-project-page/">
+  <img src="https://img.shields.io/badge/Project-Page-blue" alt="Project">
+</a>
+
 
 ## 🔥 News
 - **2026-06** SIGGRAPH-ASIA 2026 Accepted
