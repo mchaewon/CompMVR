@@ -63,10 +63,10 @@ Download the following models:
 | Model | Description | Link |
 |---|---|---|
 | SD 2.1-base | Base diffusion model | [Stable Diffusion 2.1-base](https://huggingface.co/Manojb/stable-diffusion-2-1-base) |
-<!-- | CompMVR | CompMVR stage 1 checkpoint | [compmvr_s1.pkl](#) |
-| CompMVR | CompMVR stage 2 checkpoint | [compmvr_s2.pkl](#) | -->
 | CompMVR | CompMVR stage 1 checkpoint | coming soon |
 | CompMVR | CompMVR stage 2 checkpoint | coming soon |
+<!-- | CompMVR | CompMVR stage 1 checkpoint | [compmvr_s1.pkl](#) |
+| CompMVR | CompMVR stage 2 checkpoint | [compmvr_s2.pkl](#) | -->
 
 ### Step 2: Prepare the test datasets
 
