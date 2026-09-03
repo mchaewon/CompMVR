@@ -16,7 +16,7 @@ Official PyTorch implementation of the paper "CompMVR: Compression-Aware Multi-V
   <img src="https://img.shields.io/badge/Project-Page-blue" alt="Project">
 </a>
 
-
+---
 ## 🔥 News
 - **2026-06** SIGGRAPH-ASIA 2026 Accepted
 - **2026-09** Code released.
@@ -27,10 +27,14 @@ Official PyTorch implementation of the paper "CompMVR: Compression-Aware Multi-V
 - [ ] Release pre-trained checkpoints
 - [ ] Release datasets
 
+---
+
 ## 📌 Framework
 <p align="center">
   <img src="figs/main_framework.png" width="90%">
 </p>
+
+---
 
 ## ⚙️ Dependencies & Installation
 ```bash
@@ -88,6 +92,7 @@ Download the following models:
 bash scripts/main_test.sh
 ```
 
+---
 ## 🖼️ Results
 
 ### Visual Comparison
@@ -107,7 +112,7 @@ bash scripts/main_test.sh
   <img src="figs/3DGS_viewer.png" width="95%">
 </p>
 
-
+---
 ## License
 
 This project is released under the Apache 2.0 license.
