@@ -1,10 +1,10 @@
-# CompMVR
+# CompMVR: Compression-Aware Multi-View Restoration Using Diffusion Models for Geometrically Consistent 3D Reconstruction
 
 <p align="center">
   <!-- <a href="#">
     <img src="https://img.shields.io/badge/Paper-CVPR%202026-red" alt="Paper">
   </a> -->
-  <a href="#">
+  <a href="https://github.com/mchaewon/CompMVR-project-page">
     <img src="https://img.shields.io/badge/Project-Page-blue" alt="Project">
   </a>
 </p>
@@ -21,6 +21,7 @@
 
 - [x] Release the main code 
 - [ ] Release pre-trained checkpoints
+- [ ] Release datasets
 
 ## 📌 Framework
 <p align="center">
@@ -70,7 +71,7 @@ Download the following models:
 
 ### Step 2: Prepare the test datasets
 
-Download testsets from #.
+test datasets coming soon.
 
 ### Step 3: Run Inference
 
