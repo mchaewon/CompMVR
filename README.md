@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="#">
-    <img src="https://img.shields.io/badge/Paper-SIGGRAPH-ASIA%202026-red" alt="Paper">
+    <img src="https://img.shields.io/badge/Paper-SIGGRAPH_ASIA-red" alt="Paper">
   </a>
   <a href="https://mchaewon.github.io/CompMVR-project-page/">
     <img src="https://img.shields.io/badge/Project-Page-blue" alt="Project">
