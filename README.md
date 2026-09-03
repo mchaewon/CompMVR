@@ -82,12 +82,17 @@ bash scripts/main_test.sh
 
 ### Visual Comparison
 
+#### 2D restoration results
 <p align="center">
   <img src="figs/2D_quality.png" width="95%">
 </p>
+
+#### NVS results rendered at GT camera poses
 <p align="center">
   <img src="figs/3DGS_render.png" width="95%">
 </p>
+
+#### Synthesized novel 3D views
 <p align="center">
   <img src="figs/3DGS_viewer.png" width="95%">
 </p>
