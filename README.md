@@ -9,7 +9,7 @@ Official PyTorch implementation of the paper "CompMVR: Compression-Aware Multi-V
 <sup>\*</sup> Equal contribution &nbsp;&nbsp; <sup>†</sup> Corresponding author
 
 
-<a href="#">
+<a href="https://arxiv.org/pdf/2610.32800">
   <img src="https://img.shields.io/badge/Paper-SIGGRAPH_ASIA-red" alt="Paper">
 </a>
 <a href="https://mchaewon.github.io/CompMVR-project-page/">
@@ -81,10 +81,8 @@ Download the following models:
 | Model | Description | Link |
 |---|---|---|
 | SD 2.1-base | Base diffusion model | [Stable Diffusion 2.1-base](https://huggingface.co/Manojb/stable-diffusion-2-1-base) |
-| CompMVR | CompMVR stage 1 checkpoint | coming soon |
-| CompMVR | CompMVR stage 2 checkpoint | coming soon |
-<!-- | CompMVR | CompMVR stage 1 checkpoint | [compmvr_s1.pkl](#) |
-| CompMVR | CompMVR stage 2 checkpoint | [compmvr_s2.pkl](#) | -->
+| CompMVR | CompMVR stage 1 checkpoint | [CPE.pth](https://drive.google.com/file/d/1F7lIbXuF0tfb5xmYEaqgfmdVnfnPP9pK/view?usp=sharing) |
+| CompMVR | CompMVR stage 2 checkpoint | [CompMVR.pkl](https://drive.google.com/file/d/15kbnhCyQWgd0eQOCT6yCuI7YNY55U0Zm/view?usp=sharing) |
 
 ### Step 2: Run Inference
 
