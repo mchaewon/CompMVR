@@ -20,11 +20,12 @@ Official PyTorch implementation of the paper "CompMVR: Compression-Aware Multi-V
 ## 📰 News
 - **2026-06** SIGGRAPH-ASIA 2026 Accepted
 - **2026-09** Code released.
+- **2026-10** Checkpoints released.
 
 ## 🔥 TODO
 
 - [x] Release the main code 
-- [ ] Release pre-trained checkpoints
+- [x] Release pre-trained checkpoints
 - [ ] Release datasets
 
 ---
