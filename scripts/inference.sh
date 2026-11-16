@@ -11,7 +11,7 @@ COMMON_ARGS="
 LAUNCH="python ./scripts/inference.py"
 
 $LAUNCH $COMMON_ARGS \
-    --comp_path ./checkpoints/final_stage1.pth \
-    --compmvr_path ./checkpoints/main_train_residual_UNet_input.pkl \
-    --save_root "results/ablation/main_train_residual_UNet_input" \
+    --comp_path ./checkpoints/CPE.pth \
+    --compmvr_path ./checkpoints/CompMVR.pkl \
+    --save_root "results" \
     --use_intra --use_inter --num_views 4 --use_spatial_r
