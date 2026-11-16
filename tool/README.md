@@ -1,4 +1,6 @@
 # Data Preparation
+## Train Set Preparation
+Coming soon
 
 ## Test Set Preparation
 The list covering part of the RealEstate10K and CO3Dv2 subset used in our evaluation are available in [Realestate10K_test_list.txt](./Realestate10K_test_list.txt) and [CO3Dv2_test_list.txt](./CO3Dv2_test_list.txt).
@@ -24,7 +26,9 @@ You can download the provided compressed test subsets or prepare them from the s
 
 ### 3. Input layout
 
-Put the original RGB frames under `raw_data/{dataset}/{scene}/`. Example paths:
+Put the original RGB frames under `raw_data/{dataset}/{scene}/`. 
+
+Example paths:
 
 ```text
 raw_data/CO3Dv2/sceneA/00000001.png
