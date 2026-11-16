@@ -1,6 +1,57 @@
 # Data Preparation
 ## Train Set Preparation
-Coming soon
+Our training set is constructed from **DTU, LLFF, Mip-NeRF 360, and Tanks and Temples**. The original datasets can be downloaded from the following sources:
+
+| Dataset | Original Data |
+| --- | --- |
+| DTU | [Download](https://roboimagedata.compute.dtu.dk/?page_id=36) |
+| LLFF | [Download](https://github.com/fyusion/llff) |
+| Mip-NeRF 360 | [Download](https://jonbarron.info/mipnerf360/) |
+| Tanks and Temples | [Download](https://www.tanksandtemples.org/download/) |
+
+We plan to release our compressed training data where redistribution is permitted under the respective dataset licenses, following a review of their terms. The scripts for preparing and compressing the training data will also be released in a future update.
+
+### Naming Conventions
+
+Organize the training data using the following naming conventions:
+
+| Component | Format | Example |
+| --- | --- | --- |
+| Compressed scene folder | `{codec}_{scene_name}_QP{n}` | `AV1_bicycle_QP20` |
+| Compressed frame | `frame_{index:04d}_QP{n}.png` | `frame_0001_QP20.png` |
+| GT scene folder | `{scene_name}` | `bicycle` |
+| GT frame | `frame_{index:04d}.png` | `frame_0001.png` |
+
+Frame indices start at **1** and use **four-digit zero padding**. Each compressed frame must correspond to the GT frame with the same scene name and frame index. Scene names must be unique across the training datasets.
+
+### Directory Structure
+
+```text
+dataset/
+└── trainset/
+    ├── comp/
+    │   ├── AV1_bicycle_QP20/
+    │   │   └── frame/
+    │   │       ├── frame_0001_QP20.png
+    │   │       ├── frame_0002_QP20.png
+    │   │       ├── frame_0003_QP20.png
+    │   │       └── ...
+    │   ├── AV1_bicycle_QP22/
+    │   │   └── frame/
+    │   │       ├── frame_0001_QP22.png
+    │   │       ├── frame_0002_QP22.png
+    │   │       └── ...
+    │   └── ...
+    └── gt/
+        ├── bicycle/
+        │   ├── frame_0001.png
+        │   ├── frame_0002.png
+        │   ├── frame_0003.png
+        │   └── ...
+        └── ...
+```
+
+Store compressed frames separately for each codec, scene, and QP combination. Store GT frames only once per scene, shared across all compression settings.
 
 ## Test Set Preparation
 The list covering part of the RealEstate10K and CO3Dv2 subset used in our evaluation are available in [Realestate10K_test_list.txt](./Realestate10K_test_list.txt) and [CO3Dv2_test_list.txt](./CO3Dv2_test_list.txt).
