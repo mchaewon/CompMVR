@@ -77,8 +77,8 @@ Download the following models:
 | Model | Description | Link |
 |---|---|---|
 | SD 2.1-base | Base diffusion model | [Stable Diffusion 2.1-base](https://huggingface.co/Manojb/stable-diffusion-2-1-base) |
-| CompMVR | CompMVR stage 1 checkpoint | [CPE.pth](https://drive.google.com/file/d/1F7lIbXuF0tfb5xmYEaqgfmdVnfnPP9pK/view?usp=sharing) |
-| CompMVR | CompMVR stage 2 checkpoint | [CompMVR.pkl](https://drive.google.com/file/d/15kbnhCyQWgd0eQOCT6yCuI7YNY55U0Zm/view?usp=sharing) |
+| CompMVR | CompMVR stage 1 checkpoint | [CPE.pth](https://drive.google.com/file/d/1RkfMXRxGhSj6nhDp7Jzwr54_puXKirf2/view?usp=sharing) |
+| CompMVR | CompMVR stage 2 checkpoint | [CompMVR.pkl](https://drive.google.com/file/d/1SLVWYjaapTRjQqIbiF5exvMFDj7Z3_cy/view?usp=sharing) |
 
 ### Step 2: Run Inference
 
