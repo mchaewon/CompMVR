@@ -66,12 +66,7 @@ pip install -r requirements.txt
 
 ## 🗂️ Data preparation
 
-The datasets used for training and evaluation can be downloaded from the links below:
-
-| Split | Download |
-|---|---|
-| Train set | [Download](https://gofile.me/7Z8aO/N4Dli1Yj5) |
-| Test set | [Download](https://gofile.me/7Z8aO/dtTfPA9Bn) |
+Please refer to the [data preparation guide](./data/README.md) for dataset download instructions, preprocessing steps, compression settings, and metadata.
 
 ## ⚡ Quick Inference
 
