@@ -9,6 +9,8 @@ Our training set is constructed from **DTU, LLFF, Mip-NeRF 360, and Tanks and Te
 | Mip-NeRF 360 | [Download](https://jonbarron.info/mipnerf360/) |
 | Tanks and Temples | [Download](https://www.tanksandtemples.org/download/) |
 
+The scenes used for training and validation are listed in [tool/train_list.txt](./tool/train_list.txt) and [tool/val_list.txt](./tool/val_list.txt), respectively.
+
 ### Naming Conventions
 
 Organize the training data using the following naming conventions:
