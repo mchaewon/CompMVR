@@ -1,7 +1,7 @@
 # Data Preparation
 
 ## Test Set Preparation
-A list covering part of the RealEstate10K subset used in our evaluation is available in [Realestate10K_test_list.txt](./Realestate10K_test_list.txt).
+The list covering part of the RealEstate10K and CO3Dv2 subset used in our evaluation are available in [Realestate10K_test_list.txt](./Realestate10K_test_list.txt) and [CO3Dv2_test_list.txt](./CO3Dv2_test_list.txt).
 
 For detailed compression settings, please refer to **Section 3, “Compression protocol”**, of the supplementary material available on our [project page](https://mchaewon.github.io/CompMVR-project-page/).
 
@@ -9,14 +9,10 @@ For detailed compression settings, please refer to **Section 3, “Compression p
 
 | Dataset | Original Data | Our Compressed Test Subset |
 | --- | --- | --- |
-| CO3Dv2 | [Download](https://ai.meta.com/datasets/co3d-downloads/) | [Download](CO3DV2_COMPRESSED_DOWNLOAD_URL) |
+| CO3Dv2 | [Download](https://ai.meta.com/datasets/co3d-downloads/) | [Download](https://drive.google.com/file/d/1BoKVZSFg-O_xO_qoAytIPg2fjKuOSZTQ/view?usp=sharing) |
 | Free (F2-NeRF) | [Download](https://www.dropbox.com/scl/fo/x392wbggkavb4vnq8nadw/AEYQylTYNAZ_HjnN-OWANWA?rlkey=8yj7d7sygysb3egci13b1i8lq&e=1&dl=0) | — |
 | RealEstate10K | [Download (Hugging Face mirror)](https://huggingface.co/datasets/DavidYan2001/RealEstate10K) | — |
 
-<!-- Add the compressed Free subset link after confirming that
-redistribution permission applies to the dataset:
-[Download](https://drive.google.com/file/d/1sS8NDAKN48zIsS-DbQBHijab7hHgXdbZ/view?usp=sharing)
--->
 
 You can download the provided compressed test subsets or prepare them from the source data using the instructions below.
 
@@ -24,7 +20,7 @@ You can download the provided compressed test subsets or prepare them from the s
 
 **CO3Dv2.** Our compressed test subset is derived from [CO3Dv2](https://github.com/facebookresearch/co3d) by Jeremy Reizenstein, Roman Shapovalov, Philipp Henzler, Luca Sbordone, Patrick Labatut, and David Novotny. The data are licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). We selected evaluation sequences and applied the preprocessing and compression procedures described in this guide and the supplementary material. Please retain the original attribution and license notices and comply with the noncommercial-use restriction.
 
-**Free (F2-NeRF).** The Free dataset was introduced by Peng Wang et al. in [F2-NeRF](https://totoro97.github.io/projects/f2-nerf/). Please follow the terms supplied with the original dataset. 
+<!-- **Free (F2-NeRF).** The Free dataset was introduced by Peng Wang et al. in [F2-NeRF](https://totoro97.github.io/projects/f2-nerf/). Please follow the terms supplied with the original dataset.  -->
 
 ### 3. Input layout
 
@@ -37,8 +33,6 @@ raw_data/CO3Dv2/sceneB/00000001.png
 raw_data/Free/grass/00000001.png
 raw_data/RealEstate10K/scene001/00000001.png
 ```
-
-The script recursively discovers scene folders. Each folder containing images is treated as a separate sequence. PNG, JPG, and JPEG are supported. Within each scene, use a consistent filename prefix, extension, and numeric suffix width, such as `00000001.png` or `frame_0001.png`. Frames are ordered by their numeric suffix. Files that do not match the first image's naming pattern are excluded.
 
 Input frames should have identical, even dimensions within each scene. The script reads the first frame's dimensions and reduces odd dimensions by one pixel when preparing YUV420p; it does not change the copied GT images. Use even dimensions to keep GT and reconstructed frame sizes aligned.
 
