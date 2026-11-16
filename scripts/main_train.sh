@@ -22,7 +22,7 @@ LAUNCH="accelerate launch --main_process_port 18888 ./scripts/main_train.py"
 
 
 $LAUNCH $COMMON_ARGS \
-    --comp_path ./checkpoints/final_stage1.pth \
+    --comp_path ./checkpoints/CPE.pth \
     --tracker_project_name "train_CompMVR" \
     --use_intra --use_inter --num_views 4 --use_spatial_r --use_lcorr --lambda_lcorr 0.01 --dataloader_batch_size 1
 

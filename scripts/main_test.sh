@@ -12,7 +12,7 @@ LAUNCH="python ./scripts/main_test.py"
 
 echo "===== [0/8] main_train_residual_UNet_input =====" 
 $LAUNCH $COMMON_ARGS \
-    --comp_path /path/comp_path \
-    --ours_main_path train_CompMVR/checkpoints/100000.pkl \
+    --comp_path ./checkpoints/CPE.pth \
+    --ours_main_path ./checkpoints/CompMVR.pkl \
     --save_root "results/" \
     --use_intra --use_inter --num_views 4 --use_spatial_r
