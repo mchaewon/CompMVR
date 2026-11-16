@@ -84,12 +84,12 @@ Download the following models:
 
 Evaluation
 ```bash
-bash scripts/inference.sh eval
+MODE=eval bash scripts/inference.sh 
 ```
 
 Only Restoration
 ```bash
-bash scripts/inference.sh restore
+MODE=restore bash scripts/inference.sh 
 ```
 
 ---
