@@ -26,97 +26,66 @@ You can download the provided compressed test subsets or prepare them from the s
 
 **Free (F2-NeRF).** The Free dataset was introduced by Peng Wang et al. in [F2-NeRF](https://totoro97.github.io/projects/f2-nerf/). Please follow the terms supplied with the original dataset. 
 
-### 3. Input Directory Structure
+### 3. Input layout
 
-Prepare the original videos as **8-bit YUV420p raw YUV files**.
-Each filename must follow this format:
-
-```text
-{scene_name}_{width}x{height}_{num_frames}.yuv
-```
-
-Place all scene files directly inside each dataset directory. Nested YUV directories are not supported.
+Put the original RGB frames under `raw_data/{dataset}/{scene}/`. Example paths:
 
 ```text
-raw_data/
-└── input_yuv/
-    ├── CO3Dv2/
-    │   ├── sceneA_640x480_100.yuv
-    │   └── sceneB_640x480_150.yuv
-    ├── Free/
-    │   └── grass_1920x1080_100.yuv
-    ├── RealEstate10K/
-    │   └── scene001_1280x720_100.yuv
-    └── original_rgb/                  # Optional
-        ├── CO3Dv2/
-        │   ├── sceneA/
-        │   │   ├── frame_0001.png
-        │   │   ├── frame_0002.png
-        │   │   └── ...
-        │   └── sceneB/
-        │       └── ...
-        ├── Free/
-        │   └── grass/
-        │       └── ...
-        └── RealEstate10K/
-            └── scene001/
-                └── ...
+raw_data/CO3Dv2/sceneA/00000001.png
+raw_data/CO3Dv2/sceneA/00000002.png
+raw_data/CO3Dv2/sceneB/00000001.png
+raw_data/Free/grass/00000001.png
+raw_data/RealEstate10K/scene001/00000001.png
 ```
 
-Original RGB frames are optional. When available, `export_frame.py`
-automatically detects the scene folders and uses these images as GT:
+The script recursively discovers scene folders. Each folder containing images is treated as a separate sequence. PNG, JPG, and JPEG are supported. Within each scene, use a consistent filename prefix, extension, and numeric suffix width, such as `00000001.png` or `frame_0001.png`. Frames are ordered by their numeric suffix. Files that do not match the first image's naming pattern are excluded.
 
-- PNG files are copied without re-encoding.
-- JPG/JPEG files are converted to PNG.
-- Frames are sorted by natural filename order.
-- The frame count, resolution, and ordering must match the corresponding YUV video.
-- If no RGB frames are found, GT PNGs are extracted from the original YUV.
-- If multiple RGB candidate folders are found for a scene, the script stops rather than selecting one automatically.
+Input frames should have identical, even dimensions within each scene. The script reads the first frame's dimensions and reduces odd dimensions by one pixel when preparing YUV420p; it does not change the copied GT images. Use even dimensions to keep GT and reconstructed frame sizes aligned.
 
-### 4. Run Compression and PNG Export
+`raw_data/compressed` and the selected output directory are excluded from RGB discovery.
 
-The preparation requires Python 3.9 or later, `tqdm`, and FFmpeg with the `libx264`, `libx265`, `libsvtav1`, and `libvpx-vp9` encoders. Pillow is also required when using original RGB frames.
+### 4. Run
+
+From the directory containing `compression.py`:
 
 ```bash
-pip install tqdm Pillow
+# Preview discovered scenes and planned compression jobs.
+python compression.py --dry-run
+
+# Process all datasets and scenes under raw_data.
+python compression.py --input ./raw_data --output ./testset --qp-values 27,42 --backend software --workers 4
 ```
 
-Run the preparation script from the directory containing `compression.py`, `export_frame.py`, and `prepare_testset.sh`:
+Intermediate files and the job log are stored under `{input}/compressed`, so the default run uses `raw_data/compressed`.
 
-```bash
-bash prepare_testset.sh
-```
+| Reference/output label | AVC QP | HEVC QP | AV1 CRF (software) | VP9 CRF (software) |
+| --- | --- | --- | --- | --- |
+| QP27 | 27 | 27 | 32 | 33 |
+| QP42 | 42 | 42 | 50 | 52 |
 
-The script performs the following steps for each dataset:
+### 5. Intermediate files and logs
 
-1. Compress all input scenes using the selected codecs and quality settings.
-2. Decode the compressed videos into reconstructed YUV files.
-3. Check the compression job log for failed jobs.
-4. Export reconstructed YUV frames as PNGs.
-5. Copy original RGB frames as GT, or extract GT PNGs from the original YUV when RGB frames are unavailable.
-
-The example script uses AVC, HEVC, AV1, and VP9 with quality values of 27 and 42. Adjust `QP_VALUES` in `prepare_dataset.sh` to select other settings.
-
-### 5. Intermediate Compression Outputs
-
-`compression.py` saves the encoded video, reconstructed YUV, and logs using the following structure:
+The encoded video, reconstructed YUV, and logs using the following structure:
 
 ```text
 raw_data/
 └── compressed/
-    └── CO3Dv2/
-        ├── job_log.json
-        ├── AV1_sceneA_QP27/
-        │   └── comp_result_QP27/
-        │       ├── sceneA_640x480_100.mkv
-        │       ├── sceneA_640x480_100.yuv
-        │       ├── sceneA_640x480_100_encode.txt
-        │       ├── sceneA_640x480_100_decode.txt
-        │       └── sceneA_640x480_100_vstats.log
-        ├── AV1_sceneA_QP42/
-        │   └── comp_result_QP42/
-        │       └── ...
-        └── ...
+    ├── job_log.json
+    └── AV1/
+        ├── QP27/
+        │   └── CO3Dv2/
+        │       ├── sceneA
+        │       │    ├── sceneA_input.yuv
+        │       │    ├── sceneA.mkv
+        │       │    ├── sceneA_images.txt
+        │       │    ├── sceneA_to_yuv.txt
+        │       │    ├── sceneA_encode.txt
+        │       │    ├── sceneA_decode.txt
+        │       │    └── sceneA_vstats.log
+        │       └── ...   
+        └── QP42/
+            └── CO3Dv2/
+                └── ...
 ```
 
 The same structure is created for Free and RealEstate10K.
@@ -134,9 +103,6 @@ Encoded video extensions are `.mp4` for AVC/HEVC, `.mkv` for AV1, and `.webm` fo
 
 
 ### 6. Final PNG Directory Structure
-
-`export_frame.py` saves reconstructed frames by codec, quality setting,
-dataset, and scene. GT frames are saved once per scene.
 
 ```text
 dataset/
