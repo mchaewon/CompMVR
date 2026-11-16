@@ -433,7 +433,11 @@ def main(args):
 
                 # vggt loss
                 L_corr = torch.tensor(0.0, device="cuda")
-                if args.use_inter and lcorr_loss_fn is not None:
+                if (args.use_inter
+                    and lcorr_loss_fn is not None
+                    and global_step >= 5000
+                    and global_step % 4 == 0
+                    ):
                     restored_01 = (out["output_image"] * 0.5 + 0.5).clamp(0, 1)
                     hq_01 = (x_tgt * 0.5 + 0.5).clamp(0, 1)
 
