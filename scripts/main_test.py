@@ -53,7 +53,7 @@ def parse_args():
 
     parser.add_argument("--use_intra",     action="store_true", default=False)
     parser.add_argument("--use_inter",     action="store_true", default=False)
-    parser.add_argument("--num_views",      type=int,   default=1)
+    parser.add_argument("--num_views",      type=int,   default=4)
     
     parser.add_argument("--use_spatial_r", action="store_true", default=False)
 
@@ -86,6 +86,20 @@ def parse_dir_info(comp_dir):
     gt_scene_dir = f"{scene}_{num_views}"
 
     return codec, scene, num_views, qp, gt_scene_dir
+
+def sequence_key(l_path):
+    """
+    Group key = LQ folder name, e.g. ".../HEVC_office3_QP32/frame/frame_0001.png"
+    -> "HEVC_office3_QP32", so the same scene with different codec/QP is
+    restored and saved separately. A QP in the filename (frame_0001_QP37.png)
+    overrides the folder QP, matching utils_image._get_paths_from_images.
+    """
+    folder = os.path.basename(os.path.dirname(os.path.dirname(l_path)))
+    m = re.search(r'_QP(\d+)', os.path.basename(l_path))
+    if m:
+        folder = re.sub(r'_QP\d+$', f'_QP{m.group(1)}', folder)
+    return folder
+
 
 def get_images(folder):
     return sorted(glob.glob(os.path.join(folder, "*.png")))
@@ -192,7 +206,8 @@ def main():
         lq     = batch['L'].cuda()
         gt     = batch['H'].cuda()
         lq_arr = batch['img_L_array'].cuda()
-        scene  = batch['scene'][0] if isinstance(batch['scene'], list) else batch['scene']
+        l_path = batch['L_path'][0] if isinstance(batch['L_path'], (list, tuple)) else batch['L_path']
+        scene  = sequence_key(l_path)   # {codec}_{scene}_QP{n}
         fid    = batch['frame_id']
 
         if scene not in scene_buffer:

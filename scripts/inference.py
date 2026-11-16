@@ -1,5 +1,16 @@
+"""
+inference.py
+
+Two modes:
+  * Restore only (default): restore every frame in --input_dir, no GT / metrics.
+      python scripts/inference.py --input_dir /frames --save_root ./results ...
+  * Evaluation (--eval): run on the structured testset and compute metrics.
+      python scripts/inference.py --eval --testset_root ... --gt_root ... --datasets Free ...
+"""
+
 import os
 import os.path as op
+import re
 import glob
 import csv
 import argparse
@@ -10,7 +21,6 @@ from tqdm import tqdm
 import torch
 import torch.nn.functional as F
 from torchvision import transforms
-import pyiqa
 
 from diffusion.CompMVR import CompMVR_test
 from diffusion.my_utils.wavelet_color_fix import adain_color_fix, wavelet_color_fix
@@ -29,12 +39,19 @@ def parse_args():
     parser.add_argument("--compmvr_path", type=str, required=True)
     parser.add_argument("--comp_path", type=str, required=True)
 
-    parser.add_argument("--testset_root", type=str, required=True)
-    parser.add_argument("--gt_root", type=str, required=True)
+    parser.add_argument("--eval", action="store_true", default=False,
+                        help="Evaluation mode: requires --testset_root, --gt_root, --datasets")
     parser.add_argument("--save_root", type=str, default="./results/inference")
 
+    # Restore-only mode
+    parser.add_argument("--input_dir", type=str, default=None,
+                        help="Restore-only mode: folder of frames of ONE sequence")
+
+    # Evaluation mode
+    parser.add_argument("--testset_root", type=str, default=None)
+    parser.add_argument("--gt_root", type=str, default=None)
     # Dataset filter: Free / Replica / CO3Dv2 / Re10k
-    parser.add_argument("--datasets", type=str, required=True)
+    parser.add_argument("--datasets", type=str, default=None)
 
     # Optional codec / qp filter
     parser.add_argument("--codecs", type=str, default=None)  # e.g., AV1,HEVC
@@ -43,7 +60,7 @@ def parse_args():
     parser.add_argument("--use_intra", action="store_true", default=False)
     parser.add_argument("--use_inter", action="store_true", default=False)
 
-    parser.add_argument("--num_views", type=int, default=1)
+    parser.add_argument("--num_views", type=int, default=4)
     parser.add_argument("--lora_rank", type=int, default=16)
     parser.add_argument("--timestep", type=int, default=499)
     parser.add_argument("--mixed_precision", type=str, default="fp16",
@@ -71,6 +88,18 @@ def validate_args(args):
     if not args.use_inter:
         args.num_views = 1
 
+    if args.eval:
+        missing = [n for n in ("testset_root", "gt_root", "datasets")
+                   if getattr(args, n) is None]
+        if missing:
+            raise SystemExit(
+                "[ERROR] --eval requires " + ", ".join("--" + n for n in missing))
+    else:
+        if args.input_dir is None:
+            raise SystemExit(
+                "[ERROR] Restore-only mode requires --input_dir "
+                "(or pass --eval with --testset_root/--gt_root/--datasets)")
+
 
 # =========================
 # Basic utils
@@ -80,7 +109,8 @@ def get_images(folder):
     files = []
     for ext in exts:
         files.extend(glob.glob(op.join(folder, ext)))
-    return sorted(files)
+    # set(): on case-insensitive filesystems "*.png" and "*.PNG" match the same file
+    return sorted(set(files), key=natural_key)
 
 
 def list_subdirs(path):
@@ -102,6 +132,31 @@ def ensure_dir(path):
     os.makedirs(path, exist_ok=True)
 
 
+def natural_key(path):
+    """
+    Natural sort key over every path component, so numbers compare as integers:
+    frame_2.png < frame_10.png, and frames in different subfolders stay grouped
+    by folder (folders are compared first, also naturally).
+    """
+    parts = op.normpath(path).replace("\\", "/").split("/")
+    return [
+        [int(t) if t.isdigit() else t.lower() for t in re.split(r"(\d+)", p)]
+        for p in parts
+    ]
+
+
+def list_frames(folder):
+    """Images directly under `folder`, natural-sorted (1, 2, ..., 10)."""
+    if not op.isdir(folder):
+        raise FileNotFoundError(f"input_dir not found: {folder}")
+    exts = (".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tif", ".tiff")
+    files = [
+        op.join(folder, f) for f in os.listdir(folder)
+        if op.isfile(op.join(folder, f)) and f.lower().endswith(exts)
+    ]
+    return sorted(files, key=natural_key)
+
+
 # =========================
 # Dataset structure parser
 # =========================
@@ -119,10 +174,6 @@ def collect_dataset_scenes(testset_root, gt_root, dataset_name, target_codecs=No
     Free:
       LQ: testset/AV1/QP27/Free/grass/*.png
       GT: testset/GT/Free/grass/*.JPG
-
-    Replica:
-      LQ: testset/AV1/QP27/Replica/AV1_office3_QP27/frame/*.png
-      GT: testset/GT/Replica/office3/results/*.jpg
 
     CO3Dv2:
       LQ: testset/AV1/QP27/CO3Dv2/434_61668_121209/*.png
@@ -192,7 +243,7 @@ def collect_dataset_scenes(testset_root, gt_root, dataset_name, target_codecs=No
                         lq_imgs = []
                         for root, _, _ in os.walk(lq_scene_root):
                             lq_imgs.extend(get_images(root))
-                        lq_imgs = sorted(lq_imgs)
+                        lq_imgs = sorted(lq_imgs, key=natural_key)
 
                     gt_dir = op.join(gt_root, "Replica", scene, "results")
                     gt_imgs = get_images(gt_dir)
@@ -215,12 +266,12 @@ def collect_dataset_scenes(testset_root, gt_root, dataset_name, target_codecs=No
                     lq_imgs = []
                     for root, _, _ in os.walk(lq_scene_root):
                         lq_imgs.extend(get_images(root))
-                    lq_imgs = sorted(lq_imgs)
+                    lq_imgs = sorted(lq_imgs, key=natural_key)
 
                     gt_imgs = []
                     for root, _, _ in os.walk(gt_scene_root):
                         gt_imgs.extend(get_images(root))
-                    gt_imgs = sorted(gt_imgs)
+                    gt_imgs = sorted(gt_imgs, key=natural_key)
 
                     if lq_imgs and gt_imgs:
                         scenes.append({
@@ -242,12 +293,12 @@ def collect_dataset_scenes(testset_root, gt_root, dataset_name, target_codecs=No
                     lq_imgs = []
                     for root, _, _ in os.walk(lq_scene_root):
                         lq_imgs.extend(get_images(root))
-                    lq_imgs = sorted(lq_imgs)
+                    lq_imgs = sorted(lq_imgs, key=natural_key)
 
                     gt_imgs = []
                     for root, _, _ in os.walk(gt_scene_root):
                         gt_imgs.extend(get_images(root))
-                    gt_imgs = sorted(gt_imgs)
+                    gt_imgs = sorted(gt_imgs, key=natural_key)
 
                     if lq_imgs and gt_imgs:
                         scenes.append({
@@ -342,6 +393,12 @@ def infer_multiview(model, comp, img_paths, num_views, align_method, device):
             lq_arrs.append(lq_arr)
             comp_imgs.append(comp_img)
 
+        shapes = {tuple(t.shape[-2:]) for t in lqs}
+        if len(shapes) > 1:
+            raise ValueError(
+                f"Frames in one chunk must share a resolution: "
+                f"{original_names} -> {sorted(shapes)}")
+
         lq_flat = torch.cat(lqs, dim=0)          # [V, 3, H, W], [-1,1]
         lq_arr_flat = torch.cat(lq_arrs, dim=0)  # [V, 3, H, W], [0,1]
 
@@ -356,6 +413,12 @@ def infer_multiview(model, comp, img_paths, num_views, align_method, device):
             results.append((original_names[v], out_pil))
 
     return results
+
+
+def save_results(results, save_dir):
+    ensure_dir(save_dir)
+    for name, out_pil in results:
+        out_pil.save(op.join(save_dir, name))
 
 
 # =========================
@@ -418,12 +481,64 @@ def evaluate_and_save(
 # =========================
 # Main
 # =========================
+def load_models(args, device):
+    model = CompMVR_test(args).to(device).eval()
+
+    comp = CPE(3, 3, [64, 128, 256, 512], 4, "BR")
+    comp.load_state_dict(torch.load(args.comp_path, map_location=device))
+    comp.to(device).eval()
+    return model, comp
+
+
+def run_restore(args, model, comp, chunk_size, device):
+    frames = list_frames(args.input_dir)
+    if not frames:
+        print(f"[ERROR] No images found in {args.input_dir}")
+        return
+
+    print(f"[Restore] {len(frames)} frames from {args.input_dir} (chunk={chunk_size})")
+
+    results = infer_multiview(
+        model=model,
+        comp=comp,
+        img_paths=frames,
+        num_views=chunk_size,
+        align_method=args.align_method,
+        device=device,
+    )
+    save_results(results, args.save_root)
+
+    print(f"\n=== DONE === {len(results)} frames -> {args.save_root}")
+
+
 def main():
     args = parse_args()
     validate_args(args)
 
     device = args.device
     ensure_dir(args.save_root)
+
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
+
+    chunk_size = args.num_views if args.use_inter else 1
+
+    print(
+        f"[Mode] {'eval' if args.eval else 'restore'}, use_intra={args.use_intra}, "
+        f"use_inter={args.use_inter}, num_views={chunk_size}, "
+        f"use_spatial_r={args.use_spatial_r}, use_vae_r={args.use_vae_r}"
+    )
+
+    if not args.eval:
+        model, comp = load_models(args, device)
+        run_restore(args, model, comp, chunk_size, device)
+        return
+
+    run_eval(args, chunk_size, device)
+
+
+def run_eval(args, chunk_size, device):
+    import pyiqa  # only needed for evaluation
 
     target_codecs = parse_filter_list(args.codecs)
     target_qps = parse_filter_list(args.qps)
@@ -444,19 +559,9 @@ def main():
         "clipiqa": pyiqa.create_metric("clipiqa+", device=device),
     }
 
-    model = CompMVR_test(args).to(device).eval()
+    model, comp = load_models(args, device)
 
-    comp = CPE(3, 3, [64, 128, 256, 512], 4, "BR")
-    comp.load_state_dict(torch.load(args.comp_path, map_location=device))
-    comp.to(device).eval()
-
-    chunk_size = args.num_views if args.use_inter else 1
-
-    print(
-        f"[Mode] dataset={args.datasets}, use_intra={args.use_intra}, "
-        f"use_inter={args.use_inter}, num_views={chunk_size}, "
-        f"use_spatial_r={args.use_spatial_r}, use_vae_r={args.use_vae_r}"
-    )
+    print(f"[Eval] dataset={args.datasets}")
 
     scenes = collect_dataset_scenes(
         testset_root=args.testset_root,
