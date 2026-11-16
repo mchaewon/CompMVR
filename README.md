@@ -84,18 +84,12 @@ Download the following models:
 
 Evaluation
 ```bash
-bash scripts/main_test.sh
+MODE=eval bash scripts/inference.sh 
 ```
 
 Only Restoration
 ```bash
-python scripts/restore_only.py \
-  --pretrained_model ./pretrained/stable-diffusion-2-1-base \
-  --comp_path ./checkpoints/CPE.pth \
-  --compmvr_path ./checkpoints/CompMVR.pkl \
-  --input_dir /inference/folder/anme \
-  --output_dir ./results/restored \
-  --use_intra --use_inter --num_views 4 --use_spatial_r
+MODE=restore bash scripts/inference.sh 
 ```
 
 ---
