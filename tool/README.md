@@ -9,8 +9,6 @@ Our training set is constructed from **DTU, LLFF, Mip-NeRF 360, and Tanks and Te
 | Mip-NeRF 360 | [Download](https://jonbarron.info/mipnerf360/) |
 | Tanks and Temples | [Download](https://www.tanksandtemples.org/download/) |
 
-We plan to release our compressed training data where redistribution is permitted under the respective dataset licenses, following a review of their terms. The scripts for preparing and compressing the training data will also be released in a future update.
-
 ### Naming Conventions
 
 Organize the training data using the following naming conventions:
