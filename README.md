@@ -66,7 +66,7 @@ pip install -r requirements.txt
 
 ## 🗂️ Data preparation
 
-Please refer to the [data preparation guide](./data/README.md) for dataset download instructions, preprocessing steps, compression settings, and metadata.
+Please refer to the [data preparation guide](./tool/README.md) for dataset download instructions, preprocessing steps, compression settings, and metadata.
 
 ## ⚡ Quick Inference
 
