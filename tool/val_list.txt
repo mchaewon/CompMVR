@@ -1,0 +1,16 @@
+# LLFF
+Flower
+Horns
+
+# Tanks and Temples
+Train
+
+# MipNeRF 360
+Garden
+Room
+
+# DTU
+scan24_3
+scan37_3
+scan65_3
+scan106_3
