@@ -56,7 +56,7 @@ Store compressed frames separately for each codec, scene, and QP combination. St
 ## Test Set Preparation
 The list covering part of the RealEstate10K and CO3Dv2 subset used in our evaluation are available in [Realestate10K_test_list.txt](./Realestate10K_test_list.txt) and [CO3Dv2_test_list.txt](./CO3Dv2_test_list.txt).
 
-For detailed compression settings, please refer to **Section 3, “Compression protocol”**, of the supplementary material available on our [project page](https://mchaewon.github.io/CompMVR-project-page/).
+For detailed compression settings, please refer to **Section 3, “Compression protocol”**, of the [supplementary material](../figs/docs/CompMVR_supple.pdf).
 
 ### 1. Dataset Downloads
 
