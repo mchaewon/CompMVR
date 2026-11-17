@@ -72,6 +72,19 @@ pip install -r requirements.txt
 
 Please refer to the [data preparation guide](./tool/README.md) for dataset download instructions, preprocessing steps, compression settings, and metadata.
 
+## 🧠 Training
+### Stage 1 
+Modify the [config.json](./options/cpe.json) with values like data path, then run:
+```bash
+python scripts/train_CPE.py 
+```
+### Stage 2
+Modify the [config.json](./options/config.json) with values like data path, specify the CPE checkpoint from the stage 1 in [main_train.sh](./scripts/main_train.sh).
+
+```bash
+bash main_train.sh
+```
+
 ## ⚡ Quick Inference
 
 ### Step 1: Download the Pretrained Models
