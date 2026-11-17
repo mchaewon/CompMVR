@@ -74,7 +74,7 @@ Please refer to the [data preparation guide](./tool/README.md) for dataset downl
 
 ## 🧠 Training
 ### Stage 1 
-Modify the [config.json](./options/cpe.json) with values like data path, then run:
+Modify the [cpe.json](./options/cpe.json) with values like data path, then run:
 ```bash
 python scripts/train_CPE.py 
 ```
